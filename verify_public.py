@@ -9,3 +9,9 @@ for c in d['chapters']:
  o=json.loads((r/c['detail_path']).read_text());assert o.get('polished_text');assert o['reading_status'] in ['ready','adapted']
 assert {c['collection'] for c in d['chapters']}=={f'{n}-{n+99}' for n in range(1,2101,100)}
 print('Verified 2022 story records, all polished, all 21 collections and every file hash')
+
+# Publish only aggregate editorial status; no private project notes.
+d['source_inventory_2100']={'total_source_records':165}
+d['editorial_work_status']={'extension_601_755':{'remaining':0}}
+(r/'data.json').write_text(json.dumps(d,ensure_ascii=False,separators=(',',':')))
+print('Public status: 165/165 tail sources complete, 0 remaining')

@@ -15,3 +15,12 @@ d['source_inventory_2100']={'total_source_records':165}
 d['editorial_work_status']={'extension_601_755':{'remaining':0}}
 (r/'data.json').write_text(json.dumps(d,ensure_ascii=False,separators=(',',':')))
 print('Public status: 165/165 tail sources complete, 0 remaining')
+# Version the reader script and data URL so updates bypass stale CDN caches.
+p=r/'app.js'
+s=p.read_text().replace("fetch('data.json')","fetch('data.json?v=public-complete-1')")
+p.write_text(s)
+h=hashlib.sha256(s.encode()).hexdigest()[:12]
+name=f'app-{h}.js'
+p.rename(r/name)
+i=r/'index.html'
+i.write_text(i.read_text().replace('app.js',name))
